@@ -6,7 +6,9 @@ SELECT name,
        osm_id AS __id__,
        "aerialway", "aeroway", "amenity", "barrier", "highway", "historic",
        "lock", "man_made", "natural", "power", "railway", "shop", "tourism",
-       "waterway"
+       "waterway",
+       (SELECT lower(replace(hstore(por.tags)->'name',' Floor',''))
+  from planet_osm_rels por where por.parts @> ARRAY[osm_id] and hstore(por.tags)->'type'='level')  AS indoor_level
 
 FROM planet_osm_point
 
